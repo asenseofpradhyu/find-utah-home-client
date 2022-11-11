@@ -1,8 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import validator from "validator";
+import axios from "axios";
+import { API_URL } from "../components/util/constants";
 
 // Local Imports
 
 function LoginPage() {
+  const [loginData, setloginData] = useState({
+    email: "",
+    password: "",
+    isValid: true,
+    isSubmitting: false,
+    isLogin: false,
+  });
+
+  const loginUser = (event: any) => {
+    event.preventDefault();
+    console.log("Register Clicked !!");
+    console.log(loginData);
+
+    if (
+      validator.isEmail(loginData.email) &&
+      !validator.isEmpty(loginData.password)
+    ) {
+      setloginData({ ...loginData, isSubmitting: true, isValid: true });
+      axios
+        .post(`${API_URL}/login`, {
+          email: loginData.email,
+          password: loginData.password,
+        })
+        .then(function (response) {
+          setloginData({
+            ...loginData,
+            email: "",
+            password: "",
+            isSubmitting: false,
+            isLogin: true,
+          });
+          console.log(response);
+        })
+        .catch(function (error) {
+          setloginData({
+            ...loginData,
+            isSubmitting: false,
+          });
+          console.log(error);
+        });
+      console.log("Pass");
+    } else {
+      console.log("Fail");
+      setloginData({ ...loginData, isSubmitting: false, isValid: true });
+    }
+  };
+
   return (
     <React.Fragment>
       <section className="page-header page-header-modern bg-color-light-scale-1 page-header-lg">
@@ -31,7 +81,11 @@ function LoginPage() {
               action="/"
               id="frmSignIn"
               method="post"
-              className="needs-validation"
+              className={
+                loginData.isValid
+                  ? "needs-validation"
+                  : "needs-validation was-validated"
+              }
             >
               <div className="row">
                 <div className="form-group col">
@@ -40,9 +94,15 @@ function LoginPage() {
                   </label>
                   <input
                     type="text"
-                    value=""
                     className="form-control form-control-lg text-4"
                     required
+                    value={loginData.email}
+                    onChange={(e) =>
+                      setloginData({
+                        ...loginData,
+                        email: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -53,14 +113,20 @@ function LoginPage() {
                   </label>
                   <input
                     type="password"
-                    value=""
                     className="form-control form-control-lg text-4"
                     required
+                    value={loginData.password}
+                    onChange={(e) =>
+                      setloginData({
+                        ...loginData,
+                        email: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
               <div className="row justify-content-between">
-                <div className="form-group col-md-auto">
+                {/* <div className="form-group col-md-auto">
                   <div className="custom-control custom-checkbox">
                     <input
                       type="checkbox"
@@ -74,11 +140,11 @@ function LoginPage() {
                       Remember Me
                     </label>
                   </div>
-                </div>
+                </div> */}
                 <div className="form-group col-md-auto">
                   <a
                     className="text-decoration-none text-color-dark text-color-hover-primary font-weight-semibold text-2"
-                    href="#"
+                    href="#!"
                   >
                     Forgot Password?
                   </a>
@@ -90,22 +156,11 @@ function LoginPage() {
                     type="submit"
                     className="btn btn-dark btn-modern w-100 text-uppercase rounded-0 font-weight-bold text-3 py-3"
                     data-loading-text="Loading..."
+                    onClick={loginUser}
+                    disabled={loginData.isSubmitting}
                   >
                     Login
                   </button>
-                  <div className="divider">
-                    <span className="bg-light px-4 position-absolute left-50pct top-50pct transform3dxy-n50">
-                      or
-                    </span>
-                  </div>
-                  <a
-                    href="#"
-                    className="btn btn-primary-scale-2 btn-modern w-100 text-transform-none rounded-0 font-weight-bold align-items-center d-inline-flex justify-content-center text-3 py-3"
-                    data-loading-text="Loading..."
-                  >
-                    <i className="fab fa-facebook text-5 me-2"></i> Login With
-                    Facebook
-                  </a>
                 </div>
               </div>
             </form>
