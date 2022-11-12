@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import AuthContext from "../context/auth_context";
 
 function Header() {
+  const authCtx = useContext(AuthContext);
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [toggleClass, settoggleClass] = useState(false);
+  const navigator = useNavigate();
 
-  // const toggleCssClass = () => {
-  //       const currentState = this.state.active;
-  //       this.setState({ active: !currentState });
-  //   }
+  const logoutHandler = () => {
+    authCtx.logout();
+    navigator("/");
+  };
 
   return (
     <header
@@ -37,7 +40,7 @@ function Header() {
                       <li className="list-inline-item me-4 mb-0 d-none d-lg-inline-block">
                         <i className="icons icon-location-pin text-color-secondary text-4 position-relative top-4 me-1"></i>
                         <a
-                          href="#"
+                          href="#!"
                           className="text-default text-hover-secondary font-weight-medium text-decoration-none text-2"
                         >
                           1234 Utah Street, Los Angeles / LA
@@ -59,28 +62,36 @@ function Header() {
               <div className="header-column justify-content-end">
                 <div className="header-row">
                   <ul className="list list-unstyled list-inline mb-0">
-                    <li className="list-inline-item me-4 mb-0">
-                      {/* <a
-                        href="blog-large-image-sidebar-right.html"
-                        className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
-                      >
-                        SignIn
-                      </a> */}
-                      <Link
-                        to="/login"
-                        className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
-                      >
-                        Login
-                      </Link>
-                    </li>
-                    <li className="list-inline-item me-0 mb-0">
-                      <Link
-                        to="/register"
-                        className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
-                      >
-                        Register
-                      </Link>
-                    </li>
+                    {!authCtx.isLoggedin && (
+                      <li className="list-inline-item me-4 mb-0">
+                        <Link
+                          to="/login"
+                          className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
+                        >
+                          Login
+                        </Link>
+                      </li>
+                    )}
+                    {!authCtx.isLoggedin && (
+                      <li className="list-inline-item me-0 mb-0">
+                        <Link
+                          to="/register"
+                          className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
+                        >
+                          Register
+                        </Link>
+                      </li>
+                    )}
+                    {authCtx.isLoggedin && (
+                      <li className="list-inline-item me-0 mb-0">
+                        <button
+                          className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1 border-0 bg-transparent"
+                          onClick={logoutHandler}
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>

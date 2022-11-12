@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import validator from "validator";
 import axios from "axios";
-import { API_URL } from "../components/util/constants";
+import { API_URL } from "../util/constants";
 
 // Local Imports
 

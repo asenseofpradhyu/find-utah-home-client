@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 // Local Imports
@@ -12,8 +12,11 @@ import ContactPage from "./pages/Contact_Page";
 import Error404Page from "./pages/Error404_Page";
 import PropertyDetailsPage from "./pages/PropertyDetails_Page";
 import UserProfilePage from "./pages/UserProfile_Page";
+import AuthContext from "./context/auth_context";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <React.Fragment>
       <Header />
@@ -21,13 +24,18 @@ function App() {
         {/* Start */}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="*" element={<Error404Page />} />
+          <Route path="*" element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          {authCtx.isLoggedin && (
+            <Route path="register" element={<RegisterPage />} />
+          )}
+
           <Route path="properties" element={<PropertyListPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="propertydetials" element={<PropertyDetailsPage />} />
-          <Route path="profile" element={<UserProfilePage />} />
+          {authCtx.isLoggedin && (
+            <Route path="profile" element={<UserProfilePage />} />
+          )}
         </Routes>
         {/* End */}
         <Footer />

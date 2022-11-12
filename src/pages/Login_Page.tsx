@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import axios from "axios";
-import { API_URL } from "../components/util/constants";
 
 // Local Imports
+import { API_URL } from "../util/constants";
+import AuthContext from "../context/auth_context";
 
 function LoginPage() {
+  const authCtx = useContext(AuthContext);
   const [loginData, setloginData] = useState({
     email: "",
     password: "",
@@ -13,6 +16,7 @@ function LoginPage() {
     isSubmitting: false,
     isLogin: false,
   });
+  const navigator = useNavigate();
 
   const loginUser = (event: any) => {
     event.preventDefault();
@@ -21,6 +25,7 @@ function LoginPage() {
 
     if (
       validator.isEmail(loginData.email) &&
+      !validator.isEmpty(loginData.email) &&
       !validator.isEmpty(loginData.password)
     ) {
       setloginData({ ...loginData, isSubmitting: true, isValid: true });
@@ -37,6 +42,18 @@ function LoginPage() {
             isSubmitting: false,
             isLogin: true,
           });
+          authCtx.login(response.data.token);
+          navigator("/");
+          //           {
+          //     "id": 5,
+          //     "first_name": "Pradhumansinh",
+          //     "last_name": "Padhiyar",
+          //     "phone": "9426668537",
+          //     "email": "pradhu619@gmail.com",
+          //     "is_deleted": 0,
+          //     "created_at": "2022-11-11T13:06:56.000000Z",
+          //     "updated_at": "2022-11-11T13:06:56.000000Z"
+          // }
           console.log(response);
         })
         .catch(function (error) {
@@ -119,7 +136,7 @@ function LoginPage() {
                     onChange={(e) =>
                       setloginData({
                         ...loginData,
-                        email: e.target.value,
+                        password: e.target.value,
                       })
                     }
                   />
