@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import AuthContext from "../context/auth_context";
 

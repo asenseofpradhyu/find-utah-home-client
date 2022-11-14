@@ -13,6 +13,8 @@ import Error404Page from "./pages/Error404_Page";
 import PropertyDetailsPage from "./pages/PropertyDetails_Page";
 import UserProfilePage from "./pages/UserProfile_Page";
 import AuthContext from "./context/auth_context";
+import ForgotPasswordPage from "./pages/Forgot_Password_Page";
+import ResetPasswordPage from "./pages/Reset_Password_Page";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -25,8 +27,11 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="*" element={<HomePage />} />
-          <Route path="login" element={<LoginPage />} />
-          {authCtx.isLoggedin && (
+          {!authCtx.isLoggedin && (
+            <Route path="login" element={<LoginPage />} />
+          )}
+
+          {!authCtx.isLoggedin && (
             <Route path="register" element={<RegisterPage />} />
           )}
 
@@ -36,6 +41,10 @@ function App() {
           {authCtx.isLoggedin && (
             <Route path="profile" element={<UserProfilePage />} />
           )}
+          {!authCtx.isLoggedin && (
+            <Route path="forgotpassword" element={<ForgotPasswordPage />} />
+          )}
+          <Route path="resetpassword" element={<ResetPasswordPage />} />
         </Routes>
         {/* End */}
         <Footer />

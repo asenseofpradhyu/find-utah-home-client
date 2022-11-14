@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import validator from "validator";
 import axios from "axios";
 
@@ -159,12 +159,12 @@ function LoginPage() {
                   </div>
                 </div> */}
                 <div className="form-group col-md-auto">
-                  <a
+                  <Link
+                    to="/forgotpassword"
                     className="text-decoration-none text-color-dark text-color-hover-primary font-weight-semibold text-2"
-                    href="#!"
                   >
                     Forgot Password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="row">
