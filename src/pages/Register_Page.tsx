@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import validator from "validator";
 import axios from "axios";
-import { API_URL } from "../util/constants";
 
 // Local Imports
+import { API_URL } from "../util/constants";
 
 function RegisterPage() {
   const [reigsterData, setregisterData] = useState({

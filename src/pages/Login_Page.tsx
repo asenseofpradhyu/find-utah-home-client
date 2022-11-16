@@ -42,7 +42,7 @@ function LoginPage() {
             isSubmitting: false,
             isLogin: true,
           });
-          authCtx.login(response.data.token);
+          authCtx.login(response.data.token, response.data.user);
           navigator("/");
           //           {
           //     "id": 5,

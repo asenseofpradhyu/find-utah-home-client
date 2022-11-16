@@ -83,6 +83,16 @@ function Header() {
                       </li>
                     )}
                     {authCtx.isLoggedin && (
+                      <li className="list-inline-item me-4 mb-0">
+                        <Link
+                          to="/profile"
+                          className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1"
+                        >
+                          My Account
+                        </Link>
+                      </li>
+                    )}
+                    {authCtx.isLoggedin && (
                       <li className="list-inline-item me-0 mb-0">
                         <button
                           className="text-default text-hover-secondary font-weight-semibold text-decoration-none text-1 border-0 bg-transparent"
