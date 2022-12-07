@@ -1,8 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
+import validator from "validator";
+import axios from "axios";
 
 // Local Imports
+import { API_URL } from "../util/constants";
 
 function ContactPage() {
+  const [sendContactData, setsendContactData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    message: "",
+    isValid: true,
+    isSubmitting: false,
+    isContactMsg: false,
+  });
+
+  const sendContactQuery = (event: any) => {
+    event.preventDefault();
+    console.log("Send Message Clicked !!");
+    console.log(sendContactData);
+
+    if (
+      !validator.isEmpty(sendContactData.firstName) &&
+      !validator.isEmpty(sendContactData.lastName) &&
+      validator.isEmail(sendContactData.email) &&
+      validator.isLength(sendContactData.phone, { min: 10, max: 10 }) &&
+      !validator.isEmpty(sendContactData.message)
+    ) {
+      setsendContactData({
+        ...sendContactData,
+        isSubmitting: true,
+        isValid: true,
+      });
+      axios
+        .post(`${API_URL}/save_contact_info`, {
+          email: sendContactData.email,
+          first_name: sendContactData.firstName,
+          last_name: sendContactData.lastName,
+          message: sendContactData.message,
+          phone: sendContactData.phone,
+        })
+        .then(function (response) {
+          setsendContactData({
+            ...sendContactData,
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            message: "",
+            isSubmitting: false,
+            isContactMsg: true,
+          });
+          console.log(response);
+        })
+        .catch(function (error) {
+          setsendContactData({
+            ...sendContactData,
+            isSubmitting: false,
+            isValid: false,
+          });
+          console.log(error);
+        });
+      console.log("Pass");
+    } else {
+      console.log("Fail");
+      setsendContactData({
+        ...sendContactData,
+        isSubmitting: false,
+        isValid: false,
+      });
+    }
+  };
+
   return (
     <React.Fragment>
       <section className="page-header page-header-modern bg-color-primary border-0 m-0">
@@ -39,63 +110,99 @@ function ContactPage() {
 
                 <p>We help you choose your property and any other question.</p>
                 <form
+                  action="/"
+                  id="contactUsForm"
                   className="contact-form form-style-3"
-                  action="php/contact-form.php"
-                  method="POST"
                 >
-                  <div className="contact-form-success alert alert-success d-none mt-4">
-                    <strong>Success!</strong> Your message has been sent to us.
-                  </div>
+                  {sendContactData.isContactMsg && (
+                    <div className="contact-form-success alert alert-success mt-4">
+                      <strong>Success!</strong> Your message has been sent to
+                      us. We will connect with you very soon.
+                    </div>
+                  )}
 
-                  <div className="contact-form-error alert alert-danger d-none mt-4">
-                    <strong>Error!</strong> There was an error sending your
-                    message.
-                    <span className="mail-error-message text-1 d-block"></span>
-                  </div>
+                  {/* {sendContactData.isValid && (
+                    <div className="contact-form-error alert alert-danger d-none mt-4">
+                      <strong>Error!</strong> Please Fill correct Inputs
+                      <span className="mail-error-message text-1 d-block"></span>
+                    </div>
+                  )} */}
+
+                  {!sendContactData.isValid && (
+                    <div className="contact-form-error alert alert-danger mt-4">
+                      <strong>Error!</strong> Please Fill correct Inputs
+                      <span className="mail-error-message text-1 d-block"></span>
+                    </div>
+                  )}
 
                   <div className="row">
-                    <div className="form-group mb-2">
+                    <div className="form-group col-lg-6 mb-2">
                       <input
                         type="text"
-                        value=""
-                        data-msg-required="Please enter your name."
-                        maxLength={100}
                         className="form-control bg-color-light box-shadow-none border-0"
-                        name="name"
-                        id="name"
+                        name="firstname"
+                        id="firstname"
                         required
-                        placeholder="Name *"
+                        placeholder="FirstName"
+                        value={sendContactData.firstName}
+                        onChange={(e) =>
+                          setsendContactData({
+                            ...sendContactData,
+                            firstName: e.target.value,
+                          })
+                        }
                       />
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="form-group mb-2">
+                    <div className="form-group col-lg-6 mb-2">
+                      <input
+                        type="text"
+                        className="form-control bg-color-light box-shadow-none border-0"
+                        name="lastname"
+                        id="lastname"
+                        required
+                        placeholder="LastName"
+                        value={sendContactData.lastName}
+                        onChange={(e) =>
+                          setsendContactData({
+                            ...sendContactData,
+                            lastName: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="form-group col-lg-6 mb-2">
                       <input
                         type="email"
-                        value=""
-                        data-msg-required="Please enter your email address."
-                        data-msg-email="Please enter a valid email address."
-                        maxLength={100}
                         className="form-control bg-color-light box-shadow-none border-0"
                         name="email"
                         id="email"
                         required
-                        placeholder="E-mail *"
+                        placeholder="Email"
+                        value={sendContactData.email}
+                        onChange={(e) =>
+                          setsendContactData({
+                            ...sendContactData,
+                            email: e.target.value,
+                          })
+                        }
                       />
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="form-group mb-2">
+                    <div className="form-group col-lg-6 mb-2">
                       <input
                         type="text"
-                        value=""
-                        data-msg-required="Please enter your phone number."
-                        maxLength={100}
-                        className="form-control bg-color-light box-shadow-none border-0"
+                        maxLength={10}
+                        className="form-control orm-control-lg bg-color-light box-shadow-none border-0"
                         name="phone"
                         id="phone"
                         required
-                        placeholder="Phone *"
+                        placeholder="Phone"
+                        value={sendContactData.phone}
+                        onChange={(e) =>
+                          setsendContactData({
+                            ...sendContactData,
+                            phone: e.target.value,
+                          })
+                        }
                       />
                     </div>
                   </div>
@@ -103,13 +210,19 @@ function ContactPage() {
                     <div className="form-group mb-2">
                       <textarea
                         maxLength={5000}
-                        data-msg-required="Please enter your message."
                         rows={13}
                         className="form-control bg-color-light box-shadow-none border-0"
                         name="message"
                         id="message"
                         required
-                        placeholder="Message *"
+                        placeholder="Your Message *"
+                        value={sendContactData.message}
+                        onChange={(e) =>
+                          setsendContactData({
+                            ...sendContactData,
+                            message: e.target.value,
+                          })
+                        }
                       ></textarea>
                     </div>
                   </div>
@@ -119,6 +232,8 @@ function ContactPage() {
                         <button
                           className="btn btn-secondary font-weight-semibold border-0 p-relative text-2 text-uppercase mt-1 btn-px-4 btn-py-2 mb-2"
                           type="submit"
+                          onClick={sendContactQuery}
+                          disabled={sendContactData.isSubmitting}
                         >
                           Send Message
                         </button>

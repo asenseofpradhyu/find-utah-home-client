@@ -1,9 +1,74 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import validator from "validator";
+import axios from "axios";
+
+// Local Imports
+import { API_URL } from "../util/constants";
+import AuthContext from "../context/auth_context";
 
 // Local Imports
 
 function PropertyListPage() {
+  const [propertyList, setPropertyList] = useState({});
+  // const navigator = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/featured_listing`)
+      .then(function (response) {
+        // setloginData({
+        //   ...loginData,
+        //   email: "",
+        //   password: "",
+        //   isSubmitting: false,
+        //   isLogin: true,
+        // });
+        console.log("UseEffect Render !!");
+        setPropertyList(response.data.data);
+        console.log(response.data);
+        console.log("UseState Render !!");
+        console.log(propertyList);
+        // Object.entries(propertyList).forEach(([key, value]: any) =>
+        //   console.log(key, value.cityName)
+        // );
+      })
+      .catch(function (error) {
+        // setloginData({
+        //   ...loginData,
+        //   isSubmitting: false,
+        // });
+        console.log(error);
+      });
+  }, []);
+
+  const getPropertyList = (event: any) => {
+    event.preventDefault();
+    console.log("ProperyList Append !!");
+    console.log(propertyList);
+
+    axios
+      .get(`${API_URL}/featured_listing`)
+      .then(function (response) {
+        // setloginData({
+        //   ...loginData,
+        //   email: "",
+        //   password: "",
+        //   isSubmitting: false,
+        //   isLogin: true,
+        // });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // setloginData({
+        //   ...loginData,
+        //   isSubmitting: false,
+        // });
+        console.log(error);
+      });
+    console.log("Pass");
+  };
+
   return (
     <React.Fragment>
       <section className="page-header page-header-modern bg-color-primary border-0 m-0">
@@ -204,454 +269,73 @@ function PropertyListPage() {
             </h2>
 
             <div className="row">
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
+              <>
+                {Object.entries(propertyList).map(([key, value]: any) => {
+                  return (
+                    <div
+                      className="col-12 col-sm-6 col-md-3 pb-4 mb-1"
+                      key={value.idxID}
                     >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <NavLink
-                      to="/propertydetials"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </NavLink>
-                  </div>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6 col-md-3 pb-4 mb-1">
-                <div className="card custom-card-info custom-card-info-shadow border-0">
-                  <div className="card-body overflow-hidden p-relative z-index-1">
-                    <a
-                      href="demo-real-estate-properties-detail.html"
-                      className="text-decoration-none"
-                    >
-                      <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
-                        For Sale
-                      </span>
-                      <span className="custom-card-info-img d-block">
-                        <img
-                          src="./assets/img/demos/real-estate/listing/listing-2-thumb.jpg"
-                          className="img-fluid"
-                          alt="img"
-                        />
-                      </span>
-                      <span className="custom-card-info-header d-block p-relative">
-                        <strong className="text-dark text-4">
-                          $ 1.250.000
-                        </strong>
-                        <img
-                          width="27"
-                          height="27"
-                          src="./assets/img/demos/real-estate/icons/arrow-right.svg"
-                          alt=""
-                          data-icon
-                          data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
-                          className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
-                          style={{ opacity: 1, width: 27 }}
-                        />
-                      </span>
-                      <span className="custom-card-info-content d-block">
-                        <h4 className="text-dark mb-1 text-5">South Miami</h4>
-                        <ul className="list list-unstyled list-inline mb-0">
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Beds: 3
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-2 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Baths: 2
-                            </strong>
-                          </li>
-                          <li className="list-inline-item me-0 mb-0">
-                            <strong className="text-default text-uppercase text-3">
-                              Sq Ft: 500
-                            </strong>
-                          </li>
-                        </ul>
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+                      <div className="card custom-card-info custom-card-info-shadow border-0">
+                        <div className="card-body overflow-hidden p-relative z-index-1">
+                          <NavLink
+                            to="/propertydetials"
+                            className="text-decoration-none"
+                          >
+                            <span className="custom-card-info-type bg-primary text-color-light px-3 py-1 text-1 font-weight-semibold text-uppercase d-inline-block p-absolute top-8 left-8">
+                              For Sale
+                            </span>
+                            <span className="custom-card-info-img d-block">
+                              <img
+                                src={value.image.url}
+                                className="img-fluid"
+                                alt="img"
+                              />
+                            </span>
+                            <span className="custom-card-info-header d-block p-relative">
+                              <strong className="text-dark text-4">
+                                {value.listingPrice}
+                              </strong>
+                              <img
+                                width="27"
+                                height="27"
+                                src="./assets/img/demos/real-estate/icons/arrow-right.svg"
+                                alt=""
+                                data-icon
+                                data-plugin-options="{'onlySVG': true, 'extraClass': 'svg-fill-color-secondary custom-card-info-arrow p-absolute right-0 top-5 mt-2 me-3'}"
+                                className="svg-fill-color-secondary custom-card-info-arrow p-absolute top-5 mt-2 me-3"
+                                style={{ opacity: 1, width: 27 }}
+                              />
+                            </span>
+                            <span className="custom-card-info-content d-block">
+                              <h4 className="text-dark mb-1 text-5">
+                                {value.streetName}, {value.state}
+                              </h4>
+                              <ul className="list list-unstyled list-inline mb-0">
+                                <li className="list-inline-item me-2 mb-0">
+                                  <strong className="text-default text-uppercase text-2">
+                                    Beds: {value.bedrooms}
+                                  </strong>
+                                </li>
+                                <li className="list-inline-item me-2 mb-0">
+                                  <strong className="text-default text-uppercase text-2">
+                                    Baths: {value.totalBaths}
+                                  </strong>
+                                </li>
+                                <li className="list-inline-item me-0 mb-0">
+                                  <strong className="text-default text-uppercase text-2">
+                                    Sq Ft: {value.sqFt}
+                                  </strong>
+                                </li>
+                              </ul>
+                            </span>
+                          </NavLink>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             </div>
 
             <div className="d-flex pt-3">

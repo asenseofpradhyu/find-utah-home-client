@@ -1,6 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
+
+// Local Imports
+import { API_URL } from "../util/constants";
 import AuthContext from "../context/auth_context";
 
 function Header() {
@@ -8,10 +12,23 @@ function Header() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [toggleClass, settoggleClass] = useState(false);
   const navigator = useNavigate();
+  axios.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${authCtx.authToken}`;
 
   const logoutHandler = () => {
-    authCtx.logout();
-    navigator("/");
+    axios
+      .post(`${API_URL}/logout`)
+      .then(function (response) {
+        authCtx.logout();
+        navigator("/");
+
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log("Pass");
   };
 
   return (
